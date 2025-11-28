@@ -10,6 +10,7 @@ import Notifications from "./pages/Notifications";
 import Diagnostics from "./pages/Diagnostics";
 import History from "./pages/History";
 import Settings from "./pages/Settings";
+import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -20,18 +21,19 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <Layout>
-          <Routes>
+        <Routes>
+          <Route path="/auth" element={<Auth />} />
+          <Route element={<Layout />}>
             <Route path="/" element={<Dashboard />} />
             <Route path="/vehicle" element={<VehicleDetails />} />
             <Route path="/notifications" element={<Notifications />} />
             <Route path="/diagnostics" element={<Diagnostics />} />
             <Route path="/history" element={<History />} />
             <Route path="/settings" element={<Settings />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </Layout>
+          </Route>
+          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+          <Route path="*" element={<NotFound />} />
+        </Routes>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
