@@ -1,12 +1,7 @@
-import { ReactNode } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, Outlet } from "react-router-dom";
 import { Car, Bell, FileText, Settings, Activity } from "lucide-react";
 
-interface LayoutProps {
-  children: ReactNode;
-}
-
-const Layout = ({ children }: LayoutProps) => {
+const Layout = () => {
   const location = useLocation();
 
   const navItems = [
@@ -39,7 +34,7 @@ const Layout = ({ children }: LayoutProps) => {
       {/* Main Content */}
       <main className="pt-24 pb-24 px-6">
         <div className="container mx-auto max-w-7xl">
-          {children}
+          <Outlet />
         </div>
       </main>
 
