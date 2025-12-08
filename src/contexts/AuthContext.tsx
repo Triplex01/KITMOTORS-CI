@@ -1,5 +1,4 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
-import { useNavigate } from "react-router-dom";
 
 interface User {
   id: string;
@@ -24,7 +23,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const navigate = useNavigate();
 
   useEffect(() => {
     // Charger l'utilisateur depuis le localStorage au démarrage
@@ -58,7 +56,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setUser(null);
     localStorage.removeItem("token");
     localStorage.removeItem("user");
-    navigate("/login");
+    // La redirection sera gérée par le composant qui appelle logout
+    window.location.hash = "#/login";
   };
 
   const value = {
