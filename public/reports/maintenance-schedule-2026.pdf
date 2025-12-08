@@ -1,0 +1,102 @@
+%PDF-1.4
+1 0 obj
+<<
+/Type /Catalog
+/Pages 2 0 R
+>>
+endobj
+2 0 obj
+<<
+/Type /Pages
+/Kids [3 0 R]
+/Count 1
+>>
+endobj
+3 0 obj
+<<
+/Type /Page
+/Parent 2 0 R
+/MediaBox [0 0 612 792]
+/Contents 4 0 R
+/Resources <<
+/Font <<
+/F1 5 0 R
+>>
+>>
+>>
+endobj
+4 0 obj
+<<
+/Length 700
+>>
+stream
+BT
+/F1 24 Tf
+50 750 Td
+(CALENDRIER D'ENTRETIEN) Tj
+0 -30 Td
+/F1 14 Tf
+(Prévisions 2026) Tj
+0 -20 Td
+/F1 12 Tf
+(Véhicule: Mercedes-Benz GLE 350d) Tj
+0 -20 Td
+(Immatriculation: AB-123-CD) Tj
+0 -40 Td
+/F1 14 Tf
+(ENTRETIENS PROGRAMMÉS) Tj
+/F1 12 Tf
+0 -20 Td
+(Janvier 2026: Vidange et révision) Tj
+0 -20 Td
+(Février 2026: Contrôle plaquettes de frein) Tj
+0 -20 Td
+(Mai 2026: Visite technique obligatoire) Tj
+0 -20 Td
+(Juillet 2026: Changement pneus) Tj
+0 -20 Td
+(Septembre 2026: Révision complète) Tj
+0 -40 Td
+/F1 14 Tf
+(SERVICES RECOMMANDÉS) Tj
+/F1 12 Tf
+0 -20 Td
+(- Contrôle batterie: Février) Tj
+0 -20 Td
+(- Vérification climatisation: Mars) Tj
+0 -20 Td
+(- Nettoyage filtre intérieur: Avril) Tj
+0 -20 Td
+(- Révision courroie: Décembre) Tj
+0 -40 Td
+/F1 14 Tf
+(COÛTS ESTIMÉS) Tj
+/F1 12 Tf
+0 -20 Td
+(Budget estimé 2026: 2,000 EUR) Tj
+ET
+endstream
+endobj
+5 0 obj
+<<
+/Type /Font
+/Subtype /Type1
+/BaseFont /Helvetica
+>>
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000233 00000 n 
+0000000981 00000 n 
+trailer
+<<
+/Size 6
+/Root 1 0 R
+>>
+startxref
+1060
+%%EOF

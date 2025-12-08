@@ -87,7 +87,7 @@ const History = () => {
             >
               {/* Timeline dot */}
               <div className="absolute left-[-23px] top-6 w-12 h-12 rounded-full bg-secondary border-4 border-background flex items-center justify-center">
-                <Wrench className="w-5 h-5 text-primary" strokeWidth={1.5} />
+                <Wrench className="w-5 h-5 text-gold" strokeWidth={1.5} />
               </div>
 
               <CardContent className="p-6 ml-8">
@@ -104,7 +104,7 @@ const History = () => {
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className="text-lg font-light text-primary">{item.cost}</p>
+                    <p className="text-lg font-light text-gold">{item.cost}</p>
                   </div>
                 </div>
 
@@ -133,19 +133,19 @@ const History = () => {
         <CardContent className="p-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
             <div>
-              <p className="text-2xl font-light text-primary mb-1">5</p>
+              <p className="text-2xl font-light text-gold mb-1">5</p>
               <p className="text-xs text-muted-foreground font-light">Interventions</p>
             </div>
             <div>
-              <p className="text-2xl font-light text-primary mb-1">1,785 €</p>
+              <p className="text-2xl font-light text-gold mb-1">1,785 €</p>
               <p className="text-xs text-muted-foreground font-light">Total dépensé</p>
             </div>
             <div>
-              <p className="text-2xl font-light text-primary mb-1">357 €</p>
+              <p className="text-2xl font-light text-gold mb-1">357 €</p>
               <p className="text-xs text-muted-foreground font-light">Coût moyen</p>
             </div>
             <div>
-              <p className="text-2xl font-light text-primary mb-1">2 mois</p>
+              <p className="text-2xl font-light text-gold mb-1">2 mois</p>
               <p className="text-xs text-muted-foreground font-light">Dernière visite</p>
             </div>
           </div>

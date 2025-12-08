@@ -1,13 +1,13 @@
-import { Shield, Wrench, Gauge, AlertTriangle, Clock, ChevronRight } from "lucide-react";
+import { Shield, Wrench, Gauge, AlertTriangle, Clock, ChevronRight, FileText, Download } from "lucide-react";
 import { Link } from "react-router-dom";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
 const Dashboard = () => {
   const vehicleInfo = {
-    model: "Mercedes-Benz GLE 350d",
+    model: "UNI-T",
     plate: "AB-123-CD",
-    imageUrl: "https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800&auto=format&fit=crop",
+    imageUrl: "http://services.kitmotors-ci.com/wp-content/uploads/2024/05/12-1-1.jpg",
     mileage: "45,230 km",
   };
 
@@ -88,8 +88,8 @@ const Dashboard = () => {
             to="/vehicle"
             className="flex items-center justify-between group/link"
           >
-            <span className="text-sm text-muted-foreground font-light">Voir tous les détails</span>
-            <ChevronRight className="w-4 h-4 text-primary transition-transform group-hover/link:translate-x-1" strokeWidth={1.5} />
+            <span className="text-sm text-muted-foreground font-light">Caracteristiques de votre Véhicule</span>
+            <ChevronRight className="w-4 h-4 text-gold transition-transform group-hover/link:translate-x-1" strokeWidth={1.5} />
           </Link>
         </CardContent>
       </Card>
@@ -109,7 +109,7 @@ const Dashboard = () => {
                 <CardContent className="p-6">
                   <div className="flex items-start justify-between mb-4">
                     <div className="w-12 h-12 rounded-xl bg-secondary/50 flex items-center justify-center group-hover:bg-secondary transition-colors">
-                      <Icon className="w-6 h-6 text-primary" strokeWidth={1.5} />
+                      <Icon className="w-6 h-6 text-gold" strokeWidth={1.5} />
                     </div>
                     <Badge
                       variant="outline"
@@ -136,30 +136,131 @@ const Dashboard = () => {
               to="/history"
               className="flex flex-col items-center gap-2 p-4 rounded-lg bg-secondary/30 hover:bg-secondary/50 transition-colors group"
             >
-              <Clock className="w-6 h-6 text-primary group-hover:scale-110 transition-transform" strokeWidth={1.5} />
+              <Clock className="w-6 h-6 text-gold group-hover:scale-110 transition-transform" strokeWidth={1.5} />
               <span className="text-xs font-light text-center">Historique</span>
             </Link>
             <Link
               to="/diagnostics"
               className="flex flex-col items-center gap-2 p-4 rounded-lg bg-secondary/30 hover:bg-secondary/50 transition-colors group"
             >
-              <AlertTriangle className="w-6 h-6 text-primary group-hover:scale-110 transition-transform" strokeWidth={1.5} />
+              <AlertTriangle className="w-6 h-6 text-gold group-hover:scale-110 transition-transform" strokeWidth={1.5} />
               <span className="text-xs font-light text-center">Scanner</span>
             </Link>
             <Link
               to="/notifications"
               className="flex flex-col items-center gap-2 p-4 rounded-lg bg-secondary/30 hover:bg-secondary/50 transition-colors group"
             >
-              <Shield className="w-6 h-6 text-primary group-hover:scale-110 transition-transform" strokeWidth={1.5} />
+              <Shield className="w-6 h-6 text-gold group-hover:scale-110 transition-transform" strokeWidth={1.5} />
               <span className="text-xs font-light text-center">Assurance</span>
             </Link>
             <Link
               to="/settings"
               className="flex flex-col items-center gap-2 p-4 rounded-lg bg-secondary/30 hover:bg-secondary/50 transition-colors group"
             >
-              <Wrench className="w-6 h-6 text-primary group-hover:scale-110 transition-transform" strokeWidth={1.5} />
+              <Wrench className="w-6 h-6 text-gold group-hover:scale-110 transition-transform" strokeWidth={1.5} />
               <span className="text-xs font-light text-center">Paramètres</span>
             </Link>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Activity Report Section */}
+      <Card className="glass-card border-border animate-fade-in">
+        <CardHeader>
+          <CardTitle className="text-xl font-light flex items-center gap-2">
+            <FileText className="w-5 h-5 text-gold" strokeWidth={1.5} />
+            Rapports d'Activités
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Report Card 1: Monthly Activity */}
+            <div className="p-4 rounded-lg bg-secondary/30">
+              <div className="flex items-start justify-between mb-3">
+                <div>
+                  <p className="font-light text-lg">Rapport Mensuel</p>
+                  <p className="text-xs text-muted-foreground font-light">Novembre 2025</p>
+                </div>
+                <FileText className="w-5 h-5 text-gold/50" />
+              </div>
+              <p className="text-sm text-muted-foreground font-light mb-3">
+                Résumé complet des activités, entretiens et diagnostics du mois
+              </p>
+              <a
+                href="/reports/activity-report-nov-2025.pdf"
+                download
+                className="inline-flex items-center gap-2 text-sm text-gold hover:text-gold/80 transition-colors font-light"
+              >
+                <Download className="w-4 h-4" />
+                Télécharger en PDF
+              </a>
+            </div>
+
+            {/* Report Card 2: Annual Activity */}
+            <div className="p-4 rounded-lg bg-secondary/30">
+              <div className="flex items-start justify-between mb-3">
+                <div>
+                  <p className="font-light text-lg">Rapport Annuel</p>
+                  <p className="text-xs text-muted-foreground font-light">Année 2025</p>
+                </div>
+                <FileText className="w-5 h-5 text-gold/50" />
+              </div>
+              <p className="text-sm text-muted-foreground font-light mb-3">
+                Vue d'ensemble annuelle complète avec statistiques et tendances
+              </p>
+              <a
+                href="/reports/activity-report-annual-2025.pdf"
+                download
+                className="inline-flex items-center gap-2 text-sm text-gold hover:text-gold/80 transition-colors font-light"
+              >
+                <Download className="w-4 h-4" />
+                Télécharger en PDF
+              </a>
+            </div>
+
+            {/* Report Card 3: Maintenance Schedule */}
+            <div className="p-4 rounded-lg bg-secondary/30">
+              <div className="flex items-start justify-between mb-3">
+                <div>
+                  <p className="font-light text-lg">Calendrier d'Entretien</p>
+                  <p className="text-xs text-muted-foreground font-light">Prévisions 2026</p>
+                </div>
+                <FileText className="w-5 h-5 text-gold/50" />
+              </div>
+              <p className="text-sm text-muted-foreground font-light mb-3">
+                Planning des entretiens programmés et recommandations
+              </p>
+              <a
+                href="/reports/maintenance-schedule-2026.pdf"
+                download
+                className="inline-flex items-center gap-2 text-sm text-gold hover:text-gold/80 transition-colors font-light"
+              >
+                <Download className="w-4 h-4" />
+                Télécharger en PDF
+              </a>
+            </div>
+
+            {/* Report Card 4: Expenses Summary */}
+            <div className="p-4 rounded-lg bg-secondary/30">
+              <div className="flex items-start justify-between mb-3">
+                <div>
+                  <p className="font-light text-lg">Résumé des Dépenses</p>
+                  <p className="text-xs text-muted-foreground font-light">Année 2025</p>
+                </div>
+                <FileText className="w-5 h-5 text-gold/50" />
+              </div>
+              <p className="text-sm text-muted-foreground font-light mb-3">
+                Analyse détaillée des coûts d'entretien et réparations
+              </p>
+              <a
+                href="/reports/expenses-summary-2025.pdf"
+                download
+                className="inline-flex items-center gap-2 text-sm text-gold hover:text-gold/80 transition-colors font-light"
+              >
+                <Download className="w-4 h-4" />
+                Télécharger en PDF
+              </a>
+            </div>
           </div>
         </CardContent>
       </Card>

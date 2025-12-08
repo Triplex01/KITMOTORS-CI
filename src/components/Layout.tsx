@@ -1,6 +1,10 @@
 import { ReactNode } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Car, Bell, FileText, Settings, Activity } from "lucide-react";
+import { Car, Bell, FileText, Settings, Activity, LogOut, User } from "lucide-react";
+import { useVehicleNotifications } from "@/hooks/use-vehicle-notifications";
+import { PushNotificationPrompt } from "./PushNotificationPrompt";
+import { useAuth } from "@/contexts/AuthContext";
+import { Button } from "./ui/button";
 
 interface LayoutProps {
   children: ReactNode;
@@ -8,10 +12,12 @@ interface LayoutProps {
 
 const Layout = ({ children }: LayoutProps) => {
   const location = useLocation();
+  const { unreadCount } = useVehicleNotifications();
+  const { user, logout } = useAuth();
 
   const navItems = [
     { path: "/", icon: Car, label: "Dashboard" },
-    { path: "/notifications", icon: Bell, label: "Notifications" },
+    { path: "/notifications", icon: Bell, label: "Notifications", badge: unreadCount > 0 ? unreadCount : null },
     { path: "/diagnostics", icon: Activity, label: "Diagnostics" },
     { path: "/history", icon: FileText, label: "Historique" },
     { path: "/settings", icon: Settings, label: "Paramètres" },
@@ -21,17 +27,40 @@ const Layout = ({ children }: LayoutProps) => {
 
   return (
     <div className="min-h-screen bg-background">
+      {/* Push Notification Prompt */}
+      <PushNotificationPrompt />
+
       {/* Top Bar */}
       <header className="fixed top-0 left-0 right-0 z-50 glass-card border-b border-border">
         <div className="container mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full premium-gradient flex items-center justify-center">
-              <Car className="w-5 h-5 text-primary-foreground" />
-            </div>
-            <h1 className="text-xl font-light tracking-wide">
-              <span className="text-gradient">Auto</span>
-              <span className="text-foreground">Premium</span>
-            </h1>
+            <img 
+              src="/logo.png" 
+              alt="KitMotors Logo" 
+              className="h-32 w-32 object-contain"
+            />
+          </div>
+          
+          <div className="flex items-center gap-3">
+            {user && (
+              <>
+                <div className="hidden sm:flex items-center gap-2 px-3 py-2 rounded-lg bg-secondary/50">
+                  <User className="w-4 h-4 text-muted-foreground" />
+                  <span className="text-sm font-medium">
+                    {user.firstName} {user.lastName}
+                  </span>
+                </div>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={logout}
+                  className="gap-2 hover:bg-destructive/10 hover:text-destructive"
+                >
+                  <LogOut className="w-4 h-4" />
+                  <span className="hidden sm:inline">Déconnexion</span>
+                </Button>
+              </>
+            )}
           </div>
         </div>
       </header>
@@ -54,13 +83,18 @@ const Layout = ({ children }: LayoutProps) => {
                 <Link
                   key={item.path}
                   to={item.path}
-                  className={`flex flex-col items-center gap-1 px-4 py-2 rounded-lg transition-all duration-300 ${
+                  className={`flex flex-col items-center gap-1 px-4 py-2 rounded-lg transition-all duration-300 relative ${
                     active
-                      ? "text-primary scale-110"
+                      ? "text-gold scale-110"
                       : "text-muted-foreground hover:text-foreground hover:scale-105"
                   }`}
                 >
                   <Icon className={`w-5 h-5 ${active ? "animate-scale-in" : ""}`} strokeWidth={1.5} />
+                  {item.badge && item.badge > 0 && (
+                    <span className="absolute top-0 right-0 w-5 h-5 bg-destructive rounded-full flex items-center justify-center text-xs font-bold text-white">
+                      {item.badge > 9 ? "9+" : item.badge}
+                    </span>
+                  )}
                   <span className="text-xs font-light">{item.label}</span>
                 </Link>
               );

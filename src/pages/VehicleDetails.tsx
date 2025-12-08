@@ -24,7 +24,7 @@ const VehicleDetails = () => {
     <div className="space-y-6 animate-fade-in">
       <div className="mb-8">
         <h1 className="text-3xl font-light mb-2">
-          <span className="text-gradient">Détails du Véhicule</span>
+          <span className="text-gradient">Caracteristiques de votre Véhicule</span>
         </h1>
         <p className="text-muted-foreground font-light">Informations complètes</p>
       </div>
@@ -33,8 +33,8 @@ const VehicleDetails = () => {
       <Card className="glass-card border-border overflow-hidden">
         <div className="relative h-64">
           <img
-            src="https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800&auto=format&fit=crop"
-            alt="Mercedes-Benz GLE"
+            src="http://services.kitmotors-ci.com/wp-content/uploads/2024/05/12-1-1.jpg"
+            alt="UNI-T"
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
@@ -42,7 +42,7 @@ const VehicleDetails = () => {
             <Badge variant="outline" className="bg-card/80 backdrop-blur border-border px-3 py-1 mb-2">
               AB-123-CD
             </Badge>
-            <h2 className="text-2xl font-light">Mercedes-Benz GLE 350d</h2>
+            <h2 className="text-2xl font-light">UNI-T</h2>
           </div>
         </div>
       </Card>
@@ -51,7 +51,7 @@ const VehicleDetails = () => {
       <Card className="glass-card border-border">
         <CardHeader>
           <CardTitle className="text-xl font-light flex items-center gap-2">
-            <FileText className="w-5 h-5 text-primary" strokeWidth={1.5} />
+            <FileText className="w-5 h-5 text-gold" strokeWidth={1.5} />
             Spécifications
           </CardTitle>
         </CardHeader>
@@ -61,7 +61,7 @@ const VehicleDetails = () => {
               const Icon = spec.icon;
               return (
                 <div key={spec.label} className="p-4 rounded-lg bg-secondary/30">
-                  <Icon className="w-5 h-5 text-primary mb-2" strokeWidth={1.5} />
+                  <Icon className="w-5 h-5 text-gold mb-2" strokeWidth={1.5} />
                   <p className="text-xs text-muted-foreground font-light mb-1">{spec.label}</p>
                   <p className="font-light">{spec.value}</p>
                 </div>
@@ -79,7 +79,7 @@ const VehicleDetails = () => {
               <p className="text-sm text-muted-foreground font-light mb-1">Kilométrage Actuel</p>
               <p className="text-3xl font-light text-gradient">45,230 km</p>
             </div>
-            <Gauge className="w-12 h-12 text-primary" strokeWidth={1} />
+            <Gauge className="w-12 h-12 text-gold" strokeWidth={1} />
           </div>
         </CardContent>
       </Card>
@@ -88,7 +88,7 @@ const VehicleDetails = () => {
       <Card className="glass-card border-border">
         <CardHeader>
           <CardTitle className="text-xl font-light flex items-center gap-2">
-            <SettingsIcon className="w-5 h-5 text-primary" strokeWidth={1.5} />
+            <SettingsIcon className="w-5 h-5 text-gold" strokeWidth={1.5} />
             Entretiens Programmés
           </CardTitle>
         </CardHeader>
@@ -99,7 +99,7 @@ const VehicleDetails = () => {
                 <p className="font-light">{item.service}</p>
                 <span className="text-sm text-muted-foreground font-light">{item.next}</span>
               </div>
-              <Progress value={item.progress} className="h-2 [&>div]:bg-primary" />
+              <Progress value={item.progress} className="h-2 [&>div]:bg-gold" />
             </div>
           ))}
         </CardContent>

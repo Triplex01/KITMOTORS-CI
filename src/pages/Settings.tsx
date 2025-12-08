@@ -1,9 +1,25 @@
-import { User, Bell, Car, Mail, Lock, Moon } from "lucide-react";
+import { User, Bell, Car, Mail, Lock, Moon, TestTube } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
+import { Link } from "react-router-dom";
+import { useTheme } from "@/hooks/use-theme";
+import { usePushNotifications } from "@/hooks/use-push-notifications";
+import { useState } from "react";
 
 const Settings = () => {
+  const { theme, toggleTheme } = useTheme();
+  const { isNotificationEnabled, requestNotificationPermission } = usePushNotifications();
+  const [pushEnabled, setPushEnabled] = useState(isNotificationEnabled());
+
+  const handlePushNotificationToggle = async (enabled: boolean) => {
+    if (enabled) {
+      const granted = await requestNotificationPermission();
+      setPushEnabled(granted);
+    } else {
+      setPushEnabled(false);
+    }
+  };
   return (
     <div className="space-y-6 animate-fade-in">
       <div className="mb-8">
@@ -17,7 +33,7 @@ const Settings = () => {
       <Card className="glass-card border-border animate-slide-in">
         <CardHeader>
           <CardTitle className="text-xl font-light flex items-center gap-2">
-            <User className="w-5 h-5 text-primary" strokeWidth={1.5} />
+            <User className="w-5 h-5 text-gold" strokeWidth={1.5} />
             Profil Utilisateur
           </CardTitle>
         </CardHeader>
@@ -41,7 +57,7 @@ const Settings = () => {
       <Card className="glass-card border-border animate-slide-in" style={{ animationDelay: "100ms" }}>
         <CardHeader>
           <CardTitle className="text-xl font-light flex items-center gap-2">
-            <Car className="w-5 h-5 text-primary" strokeWidth={1.5} />
+            <Car className="w-5 h-5 text-gold" strokeWidth={1.5} />
             Véhicules Enregistrés
           </CardTitle>
         </CardHeader>
@@ -65,7 +81,7 @@ const Settings = () => {
       <Card className="glass-card border-border animate-slide-in" style={{ animationDelay: "200ms" }}>
         <CardHeader>
           <CardTitle className="text-xl font-light flex items-center gap-2">
-            <Bell className="w-5 h-5 text-primary" strokeWidth={1.5} />
+            <Bell className="w-5 h-5 text-gold" strokeWidth={1.5} />
             Notifications
           </CardTitle>
         </CardHeader>
@@ -85,11 +101,18 @@ const Settings = () => {
             <div className="flex items-center gap-3">
               <Bell className="w-5 h-5 text-muted-foreground" strokeWidth={1.5} />
               <div>
-                <p className="font-light">Push</p>
-                <p className="text-xs text-muted-foreground font-light">Notifications push</p>
+                <p className="font-light">Notifications Push</p>
+                <p className="text-xs text-muted-foreground font-light">
+                  {pushEnabled 
+                    ? "Actives - Vous recevrez les alertes en temps réel" 
+                    : "Inactives - Cliquez pour activer"}
+                </p>
               </div>
             </div>
-            <Switch defaultChecked />
+            <Switch 
+              checked={pushEnabled} 
+              onCheckedChange={handlePushNotificationToggle}
+            />
           </div>
 
           <div className="flex items-center justify-between">
@@ -109,7 +132,7 @@ const Settings = () => {
       <Card className="glass-card border-border animate-slide-in" style={{ animationDelay: "300ms" }}>
         <CardHeader>
           <CardTitle className="text-xl font-light flex items-center gap-2">
-            <Moon className="w-5 h-5 text-primary" strokeWidth={1.5} />
+            <Moon className="w-5 h-5 text-gold" strokeWidth={1.5} />
             Apparence
           </CardTitle>
         </CardHeader>
@@ -117,9 +140,11 @@ const Settings = () => {
           <div className="flex items-center justify-between">
             <div>
               <p className="font-light">Mode Sombre</p>
-              <p className="text-xs text-muted-foreground font-light">Activé par défaut</p>
+              <p className="text-xs text-muted-foreground font-light">
+                {theme === "dark" ? "Activé" : "Désactivé"}
+              </p>
             </div>
-            <Switch defaultChecked disabled />
+            <Switch checked={theme === "dark"} onCheckedChange={toggleTheme} />
           </div>
         </CardContent>
       </Card>
@@ -128,7 +153,7 @@ const Settings = () => {
       <Card className="glass-card border-border animate-slide-in" style={{ animationDelay: "400ms" }}>
         <CardHeader>
           <CardTitle className="text-xl font-light flex items-center gap-2">
-            <Lock className="w-5 h-5 text-primary" strokeWidth={1.5} />
+            <Lock className="w-5 h-5 text-gold" strokeWidth={1.5} />
             Sécurité
           </CardTitle>
         </CardHeader>
@@ -139,6 +164,28 @@ const Settings = () => {
           <button className="w-full py-2 px-4 rounded-lg bg-secondary hover:bg-secondary/80 transition-colors font-light text-left">
             Authentification à Deux Facteurs
           </button>
+        </CardContent>
+      </Card>
+
+      {/* Test Notifications */}
+      <Card className="glass-card border-border animate-slide-in" style={{ animationDelay: "500ms" }}>
+        <CardHeader>
+          <CardTitle className="text-xl font-light flex items-center gap-2">
+            <TestTube className="w-5 h-5 text-gold" strokeWidth={1.5} />
+            Tester les Notifications
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          <p className="text-sm text-muted-foreground font-light mb-3">
+            Testez le système de notifications push en envoyant des notifications de démonstration.
+          </p>
+          <Link
+            to="/test-notifications"
+            className="w-full py-2 px-4 rounded-lg bg-gold/20 text-gold hover:bg-gold/30 transition-colors font-light text-center flex items-center justify-center gap-2"
+          >
+            <TestTube className="w-4 h-4" strokeWidth={1.5} />
+            Accéder à la Page de Test
+          </Link>
         </CardContent>
       </Card>
     </div>

@@ -1,0 +1,100 @@
+%PDF-1.4
+1 0 obj
+<<
+/Type /Catalog
+/Pages 2 0 R
+>>
+endobj
+2 0 obj
+<<
+/Type /Pages
+/Kids [3 0 R]
+/Count 1
+>>
+endobj
+3 0 obj
+<<
+/Type /Page
+/Parent 2 0 R
+/MediaBox [0 0 612 792]
+/Contents 4 0 R
+/Resources <<
+/Font <<
+/F1 5 0 R
+>>
+>>
+>>
+endobj
+4 0 obj
+<<
+/Length 700
+>>
+stream
+BT
+/F1 24 Tf
+50 750 Td
+(RÉSUMÉ DES DÉPENSES) Tj
+0 -30 Td
+/F1 14 Tf
+(Année 2025) Tj
+0 -20 Td
+/F1 12 Tf
+(Véhicule: Mercedes-Benz GLE 350d) Tj
+0 -20 Td
+(Immatriculation: AB-123-CD) Tj
+0 -40 Td
+/F1 14 Tf
+(ANALYSE DES DÉPENSES) Tj
+/F1 12 Tf
+0 -20 Td
+(Janvier - Mars: 520 EUR) Tj
+0 -20 Td
+(Avril - Juin: 450 EUR) Tj
+0 -20 Td
+(Juillet - Septembre: 285 EUR) Tj
+0 -20 Td
+(Octobre - Décembre: 530 EUR) Tj
+0 -40 Td
+/F1 14 Tf
+(DÉTAIL PAR CATÉGORIE) Tj
+/F1 12 Tf
+0 -20 Td
+(Entretien régulier: 680 EUR) Tj
+0 -20 Td
+(Réparations: 720 EUR) Tj
+0 -20 Td
+(Pièces détachées: 385 EUR) Tj
+0 -40 Td
+/F1 14 Tf
+(TOTAL ANNUEL) Tj
+/F1 12 Tf
+0 -20 Td
+(Total dépenses 2025: 1,785 EUR) Tj
+0 -20 Td
+(Coût moyen par mois: 149 EUR) Tj
+ET
+endstream
+endobj
+5 0 obj
+<<
+/Type /Font
+/Subtype /Type1
+/BaseFont /Helvetica
+>>
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000233 00000 n 
+0000000981 00000 n 
+trailer
+<<
+/Size 6
+/Root 1 0 R
+>>
+startxref
+1060
+%%EOF
