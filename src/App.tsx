@@ -18,14 +18,10 @@ import History from "./pages/History";
 import Settings from "./pages/Settings";
 import TestNotifications from "./pages/TestNotifications";
 import NotFound from "./pages/NotFound";
-import { useInsuranceUrgencyNotification } from "@/hooks/use-insurance-urgency-notification";
 
 const queryClient = new QueryClient();
 
 const AppContent = () => {
-  // Déclencher la notification d'urgence d'assurance
-  useInsuranceUrgencyNotification();
-
   useEffect(() => {
     // Initialiser le thème au démarrage
     const theme = localStorage.getItem("theme") || "dark";
