@@ -1,0 +1,99 @@
+%PDF-1.4
+1 0 obj
+<<
+/Type /Catalog
+/Pages 2 0 R
+>>
+endobj
+2 0 obj
+<<
+/Type /Pages
+/Kids [3 0 R]
+/Count 1
+>>
+endobj
+3 0 obj
+<<
+/Type /Page
+/Parent 2 0 R
+/MediaBox [0 0 612 792]
+/Contents 4 0 R
+/Resources <<
+/Font <<
+/F1 5 0 R
+>>
+>>
+>>
+endobj
+4 0 obj
+<<
+/Length 500
+>>
+stream
+BT
+/F1 24 Tf
+50 750 Td
+(DOCUMENT D'ASSURANCE AUTOMOBILE) Tj
+0 -40 Td
+/F1 12 Tf
+(Mercedes-Benz GLE 350d 4MATIC) Tj
+0 -20 Td
+(Contrat: AB-2024-123456) Tj
+0 -20 Td
+(Assuré: Jean Dupont) Tj
+0 -20 Td
+(Adresse: 123 Rue de la Paix, 75000 Paris) Tj
+0 -40 Td
+/F1 14 Tf
+(DETAILS DU CONTRAT) Tj
+/F1 12 Tf
+0 -20 Td
+(Assureur: Mercedes-Benz Assurance SA) Tj
+0 -20 Td
+(Type de couverture: Tous Risques) Tj
+0 -20 Td
+(Date de début: 15 décembre 2024) Tj
+0 -20 Td
+(Date d'expiration: 15 décembre 2025) Tj
+0 -20 Td
+(Bonus/Malus: -15%) Tj
+0 -20 Td
+(Prime annuelle: 850 EUR) Tj
+0 -40 Td
+/F1 14 Tf
+(GARANTIES) Tj
+/F1 12 Tf
+0 -20 Td
+(- Responsabilité civile: Illimitée) Tj
+0 -20 Td
+(- Dommages collision: 500 EUR) Tj
+0 -20 Td
+(- Vol et incendie: Couverts) Tj
+0 -20 Td
+(- Assistance 24/24: Incluse) Tj
+ET
+endstream
+endobj
+5 0 obj
+<<
+/Type /Font
+/Subtype /Type1
+/BaseFont /Helvetica
+>>
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000233 00000 n 
+0000000782 00000 n 
+trailer
+<<
+/Size 6
+/Root 1 0 R
+>>
+startxref
+861
+%%EOF

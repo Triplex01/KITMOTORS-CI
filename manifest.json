@@ -1,0 +1,23 @@
+{
+  "name": "KitMotors",
+  "short_name": "KitMotors",
+  "description": "Application premium pour propriétaires de véhicules",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "theme_color": "#D11E1B",
+  "background_color": "#0f0f0f",
+  "icons": [
+    {
+      "src": "/logo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
