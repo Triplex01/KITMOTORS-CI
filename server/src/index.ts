@@ -36,15 +36,14 @@ export const db = new Pool({
   database: process.env.DB_NAME || 'luxe_drive_hub',
 })
 
-// Test database connection (optional - don't block server startup)
-db.query('SELECT NOW()')
-  .then((res) => {
+// Test database connection
+db.query('SELECT NOW()', (err, res) => {
+  if (err) {
+    console.error('❌ Database connection failed:', err)
+  } else {
     console.log('✅ Database connected:', res.rows[0])
-  })
-  .catch((err) => {
-    console.warn('⚠️  Database connection failed (running in mock mode):', err.message)
-    console.log('💡 To enable database: Install PostgreSQL and configure .env')
-  })
+  }
+})
 
 // Routes
 app.use('/api/auth', authRoutes)

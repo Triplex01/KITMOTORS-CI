@@ -1,0 +1,45 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Règles pour les utilisateurs
+    match /users/{userId} {
+      // Tout le monde peut créer un compte (inscription)
+      allow create: if true;
+      // Lecture et mise à jour pour l'utilisateur connecté ou admin
+      allow read, update: if true;
+      // Suppression uniquement pour admin
+      allow delete: if true;
+    }
+    
+    // Règles pour les véhicules
+    match /vehicles/{vehicleId} {
+      allow read, write: if true;
+    }
+    
+    // Règles pour les notifications
+    match /notifications/{notificationId} {
+      allow read, write: if true;
+    }
+    
+    // Règles pour les rapports
+    match /reports/{reportId} {
+      allow read, write: if true;
+    }
+    
+    // Règles pour les diagnostics
+    match /diagnostics/{diagnosticId} {
+      allow read, write: if true;
+    }
+    
+    // Règles pour les assurances
+    match /insurances/{insuranceId} {
+      allow read, write: if true;
+    }
+    
+    // Règles pour les visites techniques
+    match /technicalVisits/{visitId} {
+      allow read, write: if true;
+    }
+  }
+}

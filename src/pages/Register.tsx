@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { Eye, EyeOff } from "lucide-react";
+import { createUser, getUserByEmail } from "@/lib/firestore";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -54,43 +55,51 @@ const Register = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch("http://localhost:3000/api/auth/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: formData.email,
-          password: formData.password,
-          firstName: formData.firstName,
-          lastName: formData.lastName,
-          phone: formData.phone,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("user", JSON.stringify(data.user));
-        
+      const existingUser = await getUserByEmail(formData.email);
+      if (existingUser) {
         toast({
-          title: "Compte créé avec succès",
-          description: "Bienvenue sur Luxe Drive Hub !",
-        });
-        
-        navigate("/");
-      } else {
-        toast({
-          title: "Erreur d'inscription",
-          description: data.error || "Impossible de créer le compte",
+          title: "Erreur",
+          description: "Un compte avec cet email existe déjà",
           variant: "destructive",
         });
+        setIsLoading(false);
+        return;
       }
-    } catch (error) {
+
+      const newUser = await createUser({
+        email: formData.email,
+        password: formData.password,
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        phone: formData.phone,
+        role: 'client',
+        status: 'active'
+      });
+
+      localStorage.setItem("token", "token-" + newUser.id);
+      localStorage.setItem("user", JSON.stringify({
+        id: newUser.id,
+        email: formData.email,
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        userType: "client"
+      }));
+      
+      toast({
+        title: "Compte créé avec succès",
+        description: "Bienvenue sur KitMotors !",
+      });
+      
+      // Redirection après un court délai pour afficher le toast
+      setTimeout(() => {
+        navigate("/");
+        window.location.reload();
+      }, 500);
+    } catch (error: any) {
+      console.error('Erreur inscription:', error);
       toast({
         title: "Erreur",
-        description: "Impossible de se connecter au serveur",
+        description: error?.message || "Erreur lors de l'inscription. Veuillez réessayer.",
         variant: "destructive",
       });
     } finally {

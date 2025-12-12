@@ -9,7 +9,7 @@ const History = () => {
       title: "Changement Plaquettes de Frein",
       date: "15 Oct 2025",
       mileage: "44,200 km",
-      cost: "350 €",
+      cost: "229 600 CFA",
       garage: "Garage Premium Auto",
       type: "Réparation",
     },
@@ -18,7 +18,7 @@ const History = () => {
       title: "Vidange + Filtres",
       date: "28 Août 2025",
       mileage: "42,000 km",
-      cost: "180 €",
+      cost: "118 080 CFA",
       garage: "Mercedes-Benz Service",
       type: "Entretien",
     },
@@ -27,7 +27,7 @@ const History = () => {
       title: "Contrôle Technique",
       date: "08 Mai 2025",
       mileage: "40,500 km",
-      cost: "85 €",
+      cost: "55 760 CFA",
       garage: "Dekra Contrôle Technique",
       type: "Contrôle",
     },
@@ -36,7 +36,7 @@ const History = () => {
       title: "Remplacement Pneus (x4)",
       date: "20 Mars 2025",
       mileage: "39,800 km",
-      cost: "720 €",
+      cost: "472 320 CFA",
       garage: "Garage Premium Auto",
       type: "Réparation",
     },
@@ -45,7 +45,7 @@ const History = () => {
       title: "Révision Complète",
       date: "05 Jan 2025",
       mileage: "38,000 km",
-      cost: "450 €",
+      cost: "295 200 CFA",
       garage: "Mercedes-Benz Service",
       type: "Entretien",
     },
@@ -87,7 +87,7 @@ const History = () => {
             >
               {/* Timeline dot */}
               <div className="absolute left-[-23px] top-6 w-12 h-12 rounded-full bg-secondary border-4 border-background flex items-center justify-center">
-                <Wrench className="w-5 h-5 text-gold" strokeWidth={1.5} />
+                <Wrench className="w-5 h-5 text-red-500" strokeWidth={1.5} />
               </div>
 
               <CardContent className="p-6 ml-8">

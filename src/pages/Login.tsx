@@ -5,7 +5,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, UserCheck } from "lucide-react";
+import { getUserByEmail, createUser } from "@/lib/firestore";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -20,41 +21,48 @@ const Login = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch("http://localhost:3000/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email,
-          password,
-          userType: "client",
-        }),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("user", JSON.stringify(data.user));
-        
-        toast({
-          title: "Connexion réussie",
-          description: `Bienvenue ${data.user.firstName} ${data.user.lastName}`,
-        });
-        
-        navigate("/");
-      } else {
+      const user = await getUserByEmail(email);
+      
+      if (!user) {
         toast({
           title: "Erreur de connexion",
-          description: data.error || "Email ou mot de passe incorrect",
+          description: "Aucun compte trouvé avec cet email",
           variant: "destructive",
         });
+        setIsLoading(false);
+        return;
       }
+
+      if (user.password !== password) {
+        toast({
+          title: "Erreur de connexion",
+          description: "Mot de passe incorrect",
+          variant: "destructive",
+        });
+        setIsLoading(false);
+        return;
+      }
+
+      localStorage.setItem("token", "token-" + user.id);
+      localStorage.setItem("user", JSON.stringify({
+        id: user.id,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        userType: "client"
+      }));
+      
+      toast({
+        title: "Connexion réussie",
+        description: `Bienvenue ${user.firstName} ${user.lastName}`,
+      });
+      
+      navigate("/");
+      window.location.reload();
     } catch (error) {
       toast({
         title: "Erreur",
-        description: "Impossible de se connecter au serveur",
+        description: "Erreur de connexion",
         variant: "destructive",
       });
     } finally {
@@ -139,6 +147,43 @@ const Login = () => {
               disabled={isLoading}
             >
               {isLoading ? "Connexion..." : "Se connecter"}
+            </Button>
+
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full border-red-950/30 hover:bg-red-950/10"
+              onClick={async () => {
+                // Créer ou utiliser le compte démo
+                const demoEmail = 'demo@kitmotors.com';
+                const demoPassword = 'demo123';
+                
+                let user = await getUserByEmail(demoEmail);
+                
+                if (!user) {
+                  // Créer le compte démo s'il n'existe pas
+                  user = await createUser({
+                    email: demoEmail,
+                    password: demoPassword,
+                    firstName: 'Utilisateur',
+                    lastName: 'Demo',
+                    phone: '+225 00 00 00 00',
+                    role: 'client',
+                    status: 'active'
+                  });
+                }
+                
+                setEmail(demoEmail);
+                setPassword(demoPassword);
+                toast({
+                  title: "Compte démo",
+                  description: "Identifiants démo remplis. Cliquez sur Se connecter.",
+                });
+              }}
+              disabled={isLoading}
+            >
+              <UserCheck className="w-4 h-4 mr-2" />
+              Utiliser compte démo
             </Button>
 
             <div className="text-center text-sm text-muted-foreground">
