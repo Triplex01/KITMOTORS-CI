@@ -5,13 +5,13 @@ import { Badge } from "@/components/ui/badge";
 import { usePushNotifications } from "@/hooks/use-push-notifications";
 
 const TestNotifications = () => {
-  const { sendPushNotification, isNotificationEnabled, requestNotificationPermission } = usePushNotifications();
+  const { sendNotification, isGranted, requestPermission } = usePushNotifications();
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
-  const [notificationEnabled, setNotificationEnabled] = useState(isNotificationEnabled());
+  const [notificationEnabled, setNotificationEnabled] = useState(isGranted);
 
   const handleEnableNotifications = async () => {
-    const granted = await requestNotificationPermission();
+    const granted = await requestPermission();
     setNotificationEnabled(granted);
     if (granted) {
       setMessage("✅ Notifications activées ! Vous pouvez maintenant envoyer un test.");
@@ -78,16 +78,15 @@ const TestNotifications = () => {
     const config = notificationConfigs[type];
 
     try {
-      const success = await sendPushNotification({
-        ...config,
-        data: {
-          type: type,
-          testMode: "true",
-          timestamp: new Date().toISOString(),
-        },
+      const notification = sendNotification(config.title, {
+        body: config.body,
+        icon: config.icon,
+        badge: config.badge,
+        tag: config.tag,
+        requireInteraction: config.requireInteraction,
       });
 
-      if (success) {
+      if (notification) {
         setMessage(`✅ Notification de test ${type} envoyée ! Vérifiez votre écran.`);
       } else {
         setMessage("⚠️ Impossible d'envoyer la notification. Vérifiez les permissions.");

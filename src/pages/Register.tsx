@@ -95,11 +95,12 @@ const Register = () => {
         navigate("/");
         window.location.reload();
       }, 500);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Erreur inscription:', error);
+      const errorMessage = error instanceof Error ? error.message : "Erreur lors de l'inscription. Veuillez réessayer.";
       toast({
         title: "Erreur",
-        description: error?.message || "Erreur lors de l'inscription. Veuillez réessayer.",
+        description: errorMessage,
         variant: "destructive",
       });
     } finally {

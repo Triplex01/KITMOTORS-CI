@@ -1,68 +1,39 @@
-import { Wrench, Euro, MapPin, Calendar } from "lucide-react";
+import { Wrench, Calendar, Car, Clock, Loader2 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { useState, useEffect } from "react";
+import { useAuth } from "@/contexts/AuthContext";
+import { getVehiclesByUser, Vehicle } from "@/lib/firestore";
 
 const History = () => {
-  const historyItems = [
-    {
-      id: 1,
-      title: "Changement Plaquettes de Frein",
-      date: "15 Oct 2025",
-      mileage: "44,200 km",
-      cost: "229 600 CFA",
-      garage: "Garage Premium Auto",
-      type: "Réparation",
-    },
-    {
-      id: 2,
-      title: "Vidange + Filtres",
-      date: "28 Août 2025",
-      mileage: "42,000 km",
-      cost: "118 080 CFA",
-      garage: "Mercedes-Benz Service",
-      type: "Entretien",
-    },
-    {
-      id: 3,
-      title: "Contrôle Technique",
-      date: "08 Mai 2025",
-      mileage: "40,500 km",
-      cost: "55 760 CFA",
-      garage: "Dekra Contrôle Technique",
-      type: "Contrôle",
-    },
-    {
-      id: 4,
-      title: "Remplacement Pneus (x4)",
-      date: "20 Mars 2025",
-      mileage: "39,800 km",
-      cost: "472 320 CFA",
-      garage: "Garage Premium Auto",
-      type: "Réparation",
-    },
-    {
-      id: 5,
-      title: "Révision Complète",
-      date: "05 Jan 2025",
-      mileage: "38,000 km",
-      cost: "295 200 CFA",
-      garage: "Mercedes-Benz Service",
-      type: "Entretien",
-    },
-  ];
+  const { user } = useAuth();
+  const [vehicles, setVehicles] = useState<Vehicle[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const getTypeColor = (type: string) => {
-    switch (type) {
-      case "Réparation":
-        return "bg-destructive/20 text-destructive border-destructive/30";
-      case "Entretien":
-        return "bg-info/20 text-info border-info/30";
-      case "Contrôle":
-        return "bg-success/20 text-success border-success/30";
-      default:
-        return "bg-muted/20 text-muted-foreground border-muted/30";
-    }
-  };
+  useEffect(() => {
+    const loadVehicles = async () => {
+      if (user?.id) {
+        try {
+          const userVehicles = await getVehiclesByUser(user.id);
+          setVehicles(userVehicles);
+        } catch (error) {
+          console.error("Erreur:", error);
+        }
+      }
+      setLoading(false);
+    };
+    loadVehicles();
+  }, [user?.id]);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <Loader2 className="w-8 h-8 animate-spin text-red-500" />
+      </div>
+    );
+  }
+
+  const mainVehicle = vehicles[0];
 
   return (
     <div className="space-y-6 animate-fade-in">
@@ -70,85 +41,70 @@ const History = () => {
         <h1 className="text-3xl font-light mb-2">
           <span className="text-gradient">Historique</span>
         </h1>
-        <p className="text-muted-foreground font-light">Réparations et entretiens</p>
+        <p className="text-muted-foreground font-light">
+          Réparations et entretiens de votre véhicule
+        </p>
       </div>
 
-      {/* Timeline */}
-      <div className="relative">
-        {/* Timeline line */}
-        <div className="absolute left-[23px] top-8 bottom-8 w-px bg-border" />
-
-        <div className="space-y-6">
-          {historyItems.map((item, index) => (
-            <Card
-              key={item.id}
-              className="glass-card border-border hover-lift animate-slide-in relative"
-              style={{ animationDelay: `${index * 100}ms` }}
-            >
-              {/* Timeline dot */}
-              <div className="absolute left-[-23px] top-6 w-12 h-12 rounded-full bg-secondary border-4 border-background flex items-center justify-center">
-                <Wrench className="w-5 h-5 text-red-500" strokeWidth={1.5} />
+      {/* Vehicle Summary */}
+      {mainVehicle && (
+        <Card className="glass-card border-border">
+          <CardContent className="p-6">
+            <div className="flex items-center gap-4">
+              <div className="w-16 h-16 rounded-xl bg-secondary/50 flex items-center justify-center">
+                <Car className="w-8 h-8 text-red-500" strokeWidth={1.5} />
               </div>
+              <div>
+                <h3 className="text-xl font-light">{mainVehicle.brand} {mainVehicle.model}</h3>
+                <p className="text-muted-foreground text-sm">{mainVehicle.licensePlate}</p>
+                {mainVehicle.purchaseDate && (
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Acquis le {new Date(mainVehicle.purchaseDate).toLocaleDateString('fr-FR')}
+                  </p>
+                )}
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
-              <CardContent className="p-6 ml-8">
-                <div className="flex items-start justify-between mb-3">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-2">
-                      <h3 className="text-lg font-light">{item.title}</h3>
-                      <Badge
-                        variant="outline"
-                        className={`${getTypeColor(item.type)} border font-light text-xs`}
-                      >
-                        {item.type}
-                      </Badge>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-lg font-light text-gold">{item.cost}</p>
-                  </div>
+      {/* History Content */}
+      <Card className="glass-card border-border">
+        <CardContent className="p-8 text-center">
+          <Clock className="w-16 h-16 text-muted-foreground mx-auto mb-4" strokeWidth={1} />
+          <h3 className="text-xl font-light mb-2">Historique d'entretien</h3>
+          <p className="text-muted-foreground text-sm max-w-md mx-auto">
+            L'historique des entretiens et réparations de votre véhicule sera affiché ici. 
+            Les interventions effectuées par KitMotors seront automatiquement ajoutées.
+          </p>
+          
+          {mainVehicle && (
+            <div className="mt-6 p-4 rounded-lg bg-secondary/30 max-w-sm mx-auto">
+              <p className="text-xs text-muted-foreground mb-2">Informations du véhicule</p>
+              <div className="space-y-1 text-sm">
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Marque:</span>
+                  <span>{mainVehicle.brand}</span>
                 </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
-                  <div className="flex items-center gap-2 text-muted-foreground">
-                    <Calendar className="w-4 h-4" strokeWidth={1.5} />
-                    <span className="font-light">{item.date}</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-muted-foreground">
-                    <Euro className="w-4 h-4" strokeWidth={1.5} />
-                    <span className="font-light">{item.mileage}</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-muted-foreground">
-                    <MapPin className="w-4 h-4" strokeWidth={1.5} />
-                    <span className="font-light truncate">{item.garage}</span>
-                  </div>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Modèle:</span>
+                  <span>{mainVehicle.model}</span>
                 </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </div>
-
-      {/* Summary Card */}
-      <Card className="glass-card border-border animate-fade-in">
-        <CardContent className="p-6">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-            <div>
-              <p className="text-2xl font-light text-gold mb-1">5</p>
-              <p className="text-xs text-muted-foreground font-light">Interventions</p>
+                {mainVehicle.mileage && (
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Kilométrage:</span>
+                    <span>{mainVehicle.mileage.toLocaleString()} km</span>
+                  </div>
+                )}
+                {mainVehicle.year && (
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Année:</span>
+                    <span>{mainVehicle.year}</span>
+                  </div>
+                )}
+              </div>
             </div>
-            <div>
-              <p className="text-2xl font-light text-gold mb-1">1,785 €</p>
-              <p className="text-xs text-muted-foreground font-light">Total dépensé</p>
-            </div>
-            <div>
-              <p className="text-2xl font-light text-gold mb-1">357 €</p>
-              <p className="text-xs text-muted-foreground font-light">Coût moyen</p>
-            </div>
-            <div>
-              <p className="text-2xl font-light text-gold mb-1">2 mois</p>
-              <p className="text-xs text-muted-foreground font-light">Dernière visite</p>
-            </div>
-          </div>
+          )}
         </CardContent>
       </Card>
     </div>

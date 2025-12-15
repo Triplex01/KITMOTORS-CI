@@ -1,0 +1,20 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Autoriser la lecture publique pour toutes les images
+    match /{allPaths=**} {
+      allow read: if true;
+    }
+    
+    // Autoriser l'upload dans le dossier vehicles pour les utilisateurs authentifiés
+    match /vehicles/{userId}/{allPaths=**} {
+      allow write: if request.auth != null;
+      allow write: if true; // Temporairement pour tests
+    }
+    
+    // Autoriser tous les uploads (temporaire pour le développement)
+    match /{allPaths=**} {
+      allow write: if true;
+    }
+  }
+}

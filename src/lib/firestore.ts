@@ -37,7 +37,26 @@ export interface Vehicle {
   vin?: string;
   color?: string;
   mileage?: number;
-  status: 'active' | 'inactive';
+  fuelType?: 'essence' | 'diesel' | 'hybride' | 'electrique';
+  transmission?: 'manuelle' | 'automatique';
+  images?: string[];
+  status: 'active' | 'inactive' | 'pending';
+  dealerId?: string;
+  dealerName?: string;
+  documents?: {
+    insurance?: {
+      company: string;
+      number: string;
+      expiry: string;
+    };
+    registration?: {
+      number: string;
+      expiry: string;
+    };
+  };
+  purchaseDate?: string;
+  purchasePrice?: number;
+  notes?: string;
   createdAt?: Timestamp;
 }
 
@@ -47,6 +66,8 @@ export interface Notification {
   title: string;
   message: string;
   type: 'info' | 'warning' | 'success' | 'alert';
+  category?: 'insurance' | 'technical_visit' | 'oil_change' | 'maintenance' | 'general';
+  urgency?: 'normal' | 'important' | 'urgent';
   read: boolean;
   createdAt?: Timestamp;
 }
@@ -128,13 +149,29 @@ export async function getNotifications() {
 }
 
 export async function getNotificationsByUser(userId: string) {
-  const q = query(
-    notificationsCollection, 
-    where('userId', 'in', [userId, 'all']),
-    orderBy('createdAt', 'desc')
-  );
-  const snapshot = await getDocs(q);
-  return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Notification));
+  try {
+    // Récupérer les notifications spécifiques à l'utilisateur
+    const userQuery = query(
+      notificationsCollection, 
+      where('userId', '==', userId)
+    );
+    
+    // Récupérer toutes les notifications et filtrer côté client
+    const allSnapshot = await getDocs(notificationsCollection);
+    const notifications = allSnapshot.docs
+      .map(doc => ({ id: doc.id, ...doc.data() } as Notification))
+      .filter(n => n.userId === userId || n.userId === 'all')
+      .sort((a, b) => {
+        const dateA = a.createdAt?.toDate?.() || new Date(0);
+        const dateB = b.createdAt?.toDate?.() || new Date(0);
+        return dateB.getTime() - dateA.getTime();
+      });
+    
+    return notifications;
+  } catch (error) {
+    console.error('Erreur getNotificationsByUser:', error);
+    return [];
+  }
 }
 
 export async function createNotification(notifData: Omit<Notification, 'id' | 'createdAt' | 'read'>) {

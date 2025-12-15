@@ -1,36 +1,84 @@
-import { User, Bell, Car, Mail, Lock, Moon, Sun, TestTube, Phone, Shield, Smartphone, ChevronRight } from "lucide-react";
+import { User, Bell, Car, Mail, Lock, Moon, Sun, TestTube, Phone, Shield, Smartphone, ChevronRight, Loader2 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
 import { useTheme } from "@/hooks/use-theme";
 import { usePushNotifications } from "@/hooks/use-push-notifications";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useAuth } from "@/contexts/AuthContext";
+import { getVehiclesByUser, Vehicle } from "@/lib/firestore";
 
 const Settings = () => {
   const { theme, toggleTheme } = useTheme();
-  const { isNotificationEnabled, requestNotificationPermission } = usePushNotifications();
-  const [pushEnabled, setPushEnabled] = useState(isNotificationEnabled());
+  const { isGranted, requestPermission } = usePushNotifications();
+  const [pushEnabled, setPushEnabled] = useState(false);
+  const { user } = useAuth();
+  const [vehicles, setVehicles] = useState<Vehicle[]>([]);
+  const [loadingVehicles, setLoadingVehicles] = useState(true);
+
+  // Synchroniser l'état des notifications push
+  useEffect(() => {
+    setPushEnabled(isGranted);
+  }, [isGranted]);
+
+  // Charger les véhicules de l'utilisateur
+  useEffect(() => {
+    const loadVehicles = async () => {
+      if (user?.id) {
+        try {
+          const userVehicles = await getVehiclesByUser(user.id);
+          setVehicles(userVehicles);
+        } catch (error) {
+          console.error("Erreur lors du chargement des véhicules:", error);
+        } finally {
+          setLoadingVehicles(false);
+        }
+      } else {
+        setLoadingVehicles(false);
+      }
+    };
+    loadVehicles();
+  }, [user?.id]);
 
   const handlePushNotificationToggle = async (enabled: boolean) => {
     if (enabled) {
-      const granted = await requestNotificationPermission();
+      const granted = await requestPermission();
       setPushEnabled(granted);
     } else {
       setPushEnabled(false);
     }
   };
+
+  // Obtenir les initiales de l'utilisateur
+  const getUserInitials = () => {
+    if (user?.firstName && user?.lastName) {
+      return `${user.firstName.charAt(0)}${user.lastName.charAt(0)}`.toUpperCase();
+    }
+    if (user?.email) {
+      return user.email.charAt(0).toUpperCase();
+    }
+    return "U";
+  };
+
+  const getUserDisplayName = () => {
+    if (user?.firstName && user?.lastName) {
+      return `${user.firstName} ${user.lastName}`;
+    }
+    return user?.email || "Utilisateur";
+  };
+
   return (
-    <div className="space-y-6 animate-fade-in">
-      <div className="mb-8">
+    <div className="space-y-6">
+      <div className="mb-8 animate-fade-in">
         <h1 className="text-3xl font-light mb-2">
-          <span className="text-gradient">Paramètres</span>
+          <span className="gradient-text-animate">Paramètres</span>
         </h1>
         <p className="text-muted-foreground font-light">Personnalisez votre expérience</p>
       </div>
 
       {/* Profile Section */}
-      <Card className="glass-card border-border animate-slide-in">
+      <Card className="glass-card border-border animate-slide-up">
         <CardHeader>
           <CardTitle className="text-xl font-light flex items-center gap-2">
             <User className="w-5 h-5 text-red-500" strokeWidth={1.5} />
@@ -39,41 +87,110 @@ const Settings = () => {
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex items-center gap-4">
-            <div className="w-16 h-16 rounded-full premium-gradient flex items-center justify-center text-2xl">
-              JD
+            <div className="w-16 h-16 rounded-full premium-gradient flex items-center justify-center text-2xl text-white font-medium animate-pulse-glow">
+              {getUserInitials()}
             </div>
             <div>
-              <p className="font-light text-lg">Jean Dupont</p>
-              <p className="text-sm text-muted-foreground font-light">jean.dupont@email.com</p>
+              <p className="font-light text-lg">{getUserDisplayName()}</p>
+              <p className="text-sm text-muted-foreground font-light">{user?.email}</p>
             </div>
           </div>
-          <button className="w-full py-2 px-4 rounded-lg bg-secondary hover:bg-secondary/80 transition-colors font-light">
+          <button className="w-full py-2 px-4 rounded-lg bg-secondary hover:bg-secondary/80 transition-all duration-300 font-light btn-press hover:shadow-lg">
             Modifier le Profil
           </button>
         </CardContent>
       </Card>
 
       {/* Vehicles Section */}
-      <Card className="glass-card border-border animate-slide-in" style={{ animationDelay: "100ms" }}>
+      <Card className="glass-card border-border animate-slide-up" style={{ animationDelay: "0.1s" }}>
         <CardHeader>
           <CardTitle className="text-xl font-light flex items-center gap-2">
             <Car className="w-5 h-5 text-red-500" strokeWidth={1.5} />
             Véhicules Enregistrés
+            {vehicles.length > 0 && (
+              <Badge variant="secondary" className="ml-2 notification-pulse">{vehicles.length}</Badge>
+            )}
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
-          <div className="flex items-center justify-between p-4 rounded-lg bg-secondary/30">
-            <div>
-              <p className="font-light">Mercedes-Benz GLE 350d</p>
-              <p className="text-sm text-muted-foreground font-light">AB-123-CD</p>
+          {loadingVehicles ? (
+            <div className="flex items-center justify-center py-8">
+              <Loader2 className="w-6 h-6 animate-spin text-red-500" />
+              <span className="ml-2 text-muted-foreground">Chargement...</span>
             </div>
-            <Badge variant="outline" className="bg-success/20 text-success border-success/30">
-              Actif
-            </Badge>
-          </div>
-          <button className="w-full py-2 px-4 rounded-lg border border-border hover:bg-secondary/30 transition-colors font-light">
+          ) : vehicles.length > 0 ? (
+            <div className="stagger-animation">
+              {vehicles.map((vehicle, index) => {
+                // Image par défaut selon la marque
+                const getDefaultImage = () => {
+                  const brandImages: Record<string, string> = {
+                    "MG": "https://mgmotor.co.in/images/mg-hs-exclusive-exterior-1.jpg",
+                    "MG MOTORS": "https://mgmotor.co.in/images/mg-hs-exclusive-exterior-1.jpg",
+                    "CHANGAN": "http://services.kitmotors-ci.com/wp-content/uploads/2024/05/12-1-1.jpg",
+                    "SOUEAST": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/2018_Soueast_DX7_Prime.jpg/1200px-2018_Soueast_DX7_Prime.jpg",
+                    "JETOUR": "https://jetour.com.eg/images/x70-plus-exterior.jpg",
+                  };
+                  return brandImages[vehicle.brand.toUpperCase()] || "http://services.kitmotors-ci.com/wp-content/uploads/2024/05/12-1-1.jpg";
+                };
+                const vehicleImage = vehicle.images && vehicle.images.length > 0 ? vehicle.images[0] : getDefaultImage();
+                
+                return (
+                  <Link 
+                    key={vehicle.id} 
+                    to={`/vehicle/${vehicle.id}`}
+                    className="flex items-center gap-4 p-3 rounded-xl bg-secondary/30 hover:bg-secondary/50 transition-all duration-300 group card-hover animate-slide-in"
+                    style={{ animationDelay: `${index * 0.1}s` }}
+                  >
+                    {/* Vehicle Image */}
+                    <div className="w-20 h-14 rounded-lg overflow-hidden flex-shrink-0">
+                      <img 
+                        src={vehicleImage} 
+                        alt={`${vehicle.brand} ${vehicle.model}`}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      />
+                    </div>
+                    
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2">
+                        <p className="font-medium truncate">{vehicle.brand} {vehicle.model}</p>
+                        <Badge 
+                          variant="outline" 
+                          className={`text-xs ${
+                            vehicle.status === 'active' 
+                              ? "bg-success/20 text-success border-success/30"
+                              : vehicle.status === 'pending'
+                              ? "bg-yellow-500/20 text-yellow-500 border-yellow-500/30"
+                              : "bg-gray-500/20 text-gray-500 border-gray-500/30"
+                          }`}
+                        >
+                          {vehicle.status === 'active' ? 'Actif' : vehicle.status === 'pending' ? 'En attente' : 'Inactif'}
+                        </Badge>
+                      </div>
+                      <p className="text-sm text-muted-foreground">{vehicle.licensePlate} • {vehicle.year}</p>
+                      {vehicle.color && (
+                        <p className="text-xs text-muted-foreground">{vehicle.color} • {vehicle.transmission || 'Auto'}</p>
+                      )}
+                    </div>
+                    
+                    <ChevronRight className="w-5 h-5 text-muted-foreground group-hover:text-red-500 transition-colors" />
+                  </Link>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="text-center py-6 text-muted-foreground">
+              <Car className="w-12 h-12 mx-auto mb-3 opacity-30" />
+              <p className="font-light">Aucun véhicule enregistré</p>
+              <p className="text-sm">Ajoutez votre premier véhicule</p>
+            </div>
+          )}
+          <Link 
+            to="/add-vehicle"
+            className="w-full py-3 px-4 rounded-lg border border-red-500/50 hover:bg-red-500/10 transition-colors font-light flex items-center justify-center gap-2 text-red-500"
+          >
+            <Car className="w-4 h-4" />
             + Ajouter un Véhicule
-          </button>
+          </Link>
         </CardContent>
       </Card>
 

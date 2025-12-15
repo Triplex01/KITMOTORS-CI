@@ -11,6 +11,7 @@ import Diagnostics from "./pages/Diagnostics";
 import History from "./pages/History";
 import Settings from "./pages/Settings";
 import VehicleDetails from "./pages/VehicleDetails";
+import AddVehicle from "./pages/AddVehicle";
 import Layout from "./components/Layout";
 
 function AppRoutes() {
@@ -81,6 +82,17 @@ function AppRoutes() {
           <ProtectedRoute>
             <Layout>
               <VehicleDetails />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      
+      <Route
+        path="/add-vehicle"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <AddVehicle />
             </Layout>
           </ProtectedRoute>
         }
